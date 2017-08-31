@@ -21,20 +21,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 
 
+#include "Vector3d.h"
+#include "defines.h"
 
 namespace Xanadu {
 	namespace Engine {
 
-
-
-		class Transform
+		class XANADU_API Transform
 		{
 		public:
-			Transform();
+			Transform() : _position(0, 0, 0), _rotation(0, 0, 0), _scale(1, 1, 1) {}
+			Transform(const Transform& other) : _position(other._position), _rotation(other._rotation), _scale(other._scale) {}
+
 			~Transform();
 
-		private:
+			void Translate(float x, float y, float z);
+			void Translate(const Xanadu::XMath::Vector3d& position);
+			void Rotate(float roll, float pitch, float yaw);
+			void Rotate(const Xanadu::XMath::Vector3d& rotation);
+			void Scale(float sx, float sy, float sz);
+			void Scale(const Xanadu::XMath::Vector3d& scale);
 
+			Xanadu::XMath::Vector3d GetPosition() const { return _position; }
+			Xanadu::XMath::Vector3d GetRotation() const { return _rotation; }
+			Xanadu::XMath::Vector3d GetScale() const { return _scale; }
+
+		private:
+			Xanadu::XMath::Vector3d _position;
+			Xanadu::XMath::Vector3d _rotation;
+			Xanadu::XMath::Vector3d _scale;
 
 		};
 

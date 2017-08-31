@@ -24,15 +24,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace Xanadu {
 	namespace Engine {
 
-		Transform::Transform()
-		{
-		}
-
-
 		Transform::~Transform()
 		{
 		}
 
+		void Transform::Translate(float x, float y, float z) 
+		{
+			_position = Xanadu::XMath::Vector3d(x, y, z);
+		}
+
+		void Transform::Translate(const Xanadu::XMath::Vector3d& position)
+		{
+			_position = Xanadu::XMath::Vector3d(position);
+		}
+
+		void Transform::Rotate(float roll, float pitch, float yaw)
+		{
+			_rotation = Xanadu::XMath::Vector3d(roll, pitch, yaw);
+		}
+
+		void Transform::Rotate(const Xanadu::XMath::Vector3d& rotation)
+		{
+			_rotation = Xanadu::XMath::Vector3d(rotation);
+		}
+
+		void Transform::Scale(float sx, float sy, float sz)
+		{
+			_scale = Xanadu::XMath::Vector3d(sx, sy, sz);
+		}
+
+		void Transform::Scale(const Xanadu::XMath::Vector3d& scale)
+		{
+			_scale = Xanadu::XMath::Vector3d(scale);
+		}
 
 	}
 }

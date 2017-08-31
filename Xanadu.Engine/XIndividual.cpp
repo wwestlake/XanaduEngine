@@ -18,14 +18,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 
 
-#include "stdafx.h"
 #include "XIndividual.h"
 
 namespace Xanadu {
 	namespace Engine {
 
-		XIndividual::XIndividual()
+		XIndividual::XIndividual() 
 		{
+			
 		}
 
 

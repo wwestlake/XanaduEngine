@@ -1,4 +1,5 @@
-#pragma once
+#ifndef XANADU_SINGLE_INCLUDE_GLUTIL_H
+#define XANADU_SINGLE_INCLUDE_GLUTIL_H
 
 //WIN32 INLCUDE
 #define WIN32_LEAN_AND_MEAN
@@ -25,5 +26,6 @@
 
 
 
+#endif
 
 

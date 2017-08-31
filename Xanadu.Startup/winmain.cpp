@@ -6,8 +6,8 @@
 #include "SystemLogger.h"
 
 #include <list>
-#include <boost\filesystem.hpp>
-#include <boost\uuid\uuid.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/string_generator.hpp>
 #include <boost/exception/to_string.hpp>

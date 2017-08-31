@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;XANADUENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\boost_1_64_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\boost_1_64_0;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.XMath;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.Utilities</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -181,6 +181,14 @@
     <ClCompile Include="Xanadu.Engine.cpp" />
     <ClCompile Include="XComponent.cpp" />
     <ClCompile Include="XIndividual.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Xanadu.Utilities\Xanadu.Utilities.vcxproj">
+      <Project>{742ec41d-f340-4802-9430-7fe70e10c44f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Xanadu.XMath\Xanadu.XMath.vcxproj">
+      <Project>{82f9cb27-e76f-4942-b3bd-6b7f805bfc41}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

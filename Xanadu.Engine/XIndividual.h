@@ -20,6 +20,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 
+#include "defines.h"
 #include "XThing.h"
 #include "Transform.h"
 
@@ -31,6 +32,10 @@ namespace Xanadu {
 		public:
 			XIndividual();
 			virtual ~XIndividual();
+
+			Transform GetTransform() const {
+				return _transform;
+			}
 
 		private:
 			Transform _transform;
