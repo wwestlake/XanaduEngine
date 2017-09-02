@@ -2,6 +2,7 @@
 #include "catch.hpp"
 #include "XanaduUtilities.h"
 
+
 TEST_CASE("File opens and reads a file", "[Xanadu::Utilities::File]") {
 
 	Xanadu::Utilities::TextFile file("test.txt");

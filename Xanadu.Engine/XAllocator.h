@@ -21,147 +21,51 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 
 #include "defines.h"
+#include <iostream>
 #include <assert.h>
 #include <stdlib.h>
 #include <vector>
 #include <boost/thread/mutex.hpp>
+#include <boost/type_traits/is_base_of.hpp>
+#include <boost/static_assert.hpp>
+#include <boost/shared_ptr.hpp>
+#include "XThing.h"
+#include "XMemoryManager.h"
 
 namespace Xanadu {
 	namespace Engine {
 
-		typedef __int8 u8;
-		typedef unsigned long ulong;
-		typedef unsigned char* poolptr;
-
-		template <typename T> struct asset_handle;
-
-		class XANADU_API allocation_failed_exception {};
-
-
-		struct XANADU_API allocation_record {
-			poolptr start;
-			size_t length;
-			ulong offset;
-			bool allocated = false;
-		};
-
+		using namespace boost;
 
 		class XANADU_API XAllocator {
+
 		public:
 
-			XAllocator(size_t size, u8 alignment = 4) {
-				_alignment = alignment;
-				_pool = (poolptr)malloc(size);
-				_free = _pool;
-				_available = size;
+			XAllocator(XMemoryManager* manager) {
+				_manager = manager;
 			}
 
-			virtual ~XAllocator() {
-				for (auto rec : _allocations) {
-					mem_deallocate(rec);
-				}
-				free(_pool);
+			template <typename T> 
+			boost::shared_ptr<T> Allocate() {
+				BOOST_STATIC_ASSERT((boost::is_base_of<XThing, T>::value));
+				auto ptr = _manager->Allocate(sizeof(T));
+				auto new_ptr = new (ptr.get(), &XAllocator::Deallocate) T;
+				return boost::shared_ptr<T>(new_ptr);
 			}
 
 			template <typename T>
-			asset_handle<T> allocate();
+			void Deallocate(T object) {
+				BOOST_STATIC_ASSERT((boost::is_base_of<XThing, T>::value));
+				T::~T();
+				_manager->Deallocate(object);
+			}
 
-			template <typename T>
-			void deallocate(asset_handle<T> t);
-
-			allocation_record* findRecord(ulong offset);
-
-			template <typename T> friend struct asset_handle;
-
-		protected:
-			u8 _alignment;
-			poolptr _pool;
-			poolptr _free;
-			size_t _available;
-			std::vector<allocation_record> _allocations;
-			boost::mutex _mtx;
-
-			allocation_record mem_allocate(size_t size);
-			void mem_deallocate(allocation_record& rec);
-
-			bool findSpace(size_t size, allocation_record& record);
-			allocation_record* findRecord(poolptr ptr);
+		private:
+			XMemoryManager* _manager;
 		};
 
-
-		template <typename T>
-		struct asset_handle {
-			ulong id;
-			XAllocator* _allocator;
-			boost::mutex _mtx;
-
-			T* operator->() {
-				//_mtx.lock();
-				T* result = nullptr;
-
-				allocation_record* record = nullptr;
-
-				for (auto rec : _allocator->_allocations) {
-					if (rec.offset == id) {
-						record = &rec;
-					}
-				}
-
-				if (record != nullptr && record->allocated)
-				{
-					result = (T*)(record->start);
-				}
-				//_mtx.unlock();
-				return result;
-			}
-
-		};
-
-
-		template<typename T>
-		inline asset_handle<T> XAllocator::allocate()
-		{
-			_mtx.lock();
-			size_t size = sizeof(T);
-			auto rec = mem_allocate(size);
-			struct asset_handle<T> result;
-			result.id = rec.offset;
-			result._allocator = this;
-			T* p = new ((void*)(rec.start)) T;
-			_mtx.unlock();
-			return result;
-		}
-
-		template<typename T>
-		inline void XAllocator::deallocate(asset_handle<T> handle)
-		{
-			_mtx.lock();
-			for (auto rec : _allocations) {
-				if (rec.offset == handle.id) {
-					mem_deallocate(rec);
-					handle->T::~T();
-					break;
-				}
-			}
-			_mtx.unlock();
-		}
-
-		inline allocation_record* XAllocator::findRecord(ulong offset)
-		{
-			_mtx.lock();
-			for (auto rec : _allocations) {
-				if (rec.offset == offset) {
-					_mtx.unlock();
-					return &rec;
-				}
-			}
-			_mtx.unlock();
-			return nullptr;
-		}
 
 	}
-
-
 }
 
 

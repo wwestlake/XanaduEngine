@@ -22,6 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "GLUtil.h"
 #include "SystemLogger.h"
 #include <map>
+#include <boost/shared_ptr.hpp>
+#include "XMemoryManager.h"
+#include "XIndividual.h"
 
 namespace util = Xanadu::Utilities;
 
@@ -46,6 +49,7 @@ namespace Xanadu {
 
 		GLApp::GLApp()
 		{
+			MemoryHandle<XIndividual> test;
 		}
 
 		GLApp::GLApp(HINSTANCE hInstance)

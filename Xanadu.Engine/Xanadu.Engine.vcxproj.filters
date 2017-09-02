@@ -58,6 +58,12 @@
     <ClInclude Include="XAllocator.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="XMemory.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="XMemoryManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -88,6 +94,9 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="XAllocator.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="XMemory.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>

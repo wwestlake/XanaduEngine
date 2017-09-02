@@ -91,6 +91,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;XANADUENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>E:\boost_1_64_0;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.XMath;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.Utilities</AdditionalIncludeDirectories>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,6 +156,8 @@
     <ClInclude Include="XAllocator.h" />
     <ClInclude Include="XComponent.h" />
     <ClInclude Include="XIndividual.h" />
+    <ClInclude Include="XMemory.h" />
+    <ClInclude Include="XMemoryManager.h" />
     <ClInclude Include="XThing.h" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +184,7 @@
     <ClCompile Include="Xanadu.Engine.cpp" />
     <ClCompile Include="XComponent.cpp" />
     <ClCompile Include="XIndividual.cpp" />
+    <ClCompile Include="XMemory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xanadu.Utilities\Xanadu.Utilities.vcxproj">

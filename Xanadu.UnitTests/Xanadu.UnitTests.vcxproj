@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.XMath;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.Utilities;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.XMath;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.Utilities;E:\boost_1_64_0;$(IncludePath)</IncludePath>
     <LibraryPath>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -91,7 +91,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.XMath;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.XMath;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.Utilities;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Y-  %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -166,8 +166,12 @@
     <ClCompile Include="UtilitiyFileUnitTests.cpp" />
     <ClCompile Include="XanaduUnitTests.cpp" />
     <ClCompile Include="XMathUnitTests.cpp" />
+    <ClCompile Include="XMemoryTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Xanadu.Engine\Xanadu.Engine.vcxproj">
+      <Project>{cb23db7a-8140-4fe1-8aac-2862a6b6c5ca}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Xanadu.Utilities\Xanadu.Utilities.vcxproj">
       <Project>{742ec41d-f340-4802-9430-7fe70e10c44f}</Project>
     </ProjectReference>
