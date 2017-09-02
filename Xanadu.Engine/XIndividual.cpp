@@ -35,12 +35,17 @@ namespace Xanadu {
 
 		XIndividual::XIndividual() 
 		{
-			
+			_transform = new Transform();
+			_comps = new vector<ComponentRecord>();
+			_children = new vector<ChildRecord>();
+
 		}
 
 
 		XIndividual::~XIndividual()
 		{
+			delete _comps;
+			delete _children;
 		}
 
 

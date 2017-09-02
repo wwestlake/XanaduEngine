@@ -37,7 +37,7 @@ namespace Xanadu {
 		using namespace boost::intrusive;
 		using namespace std;
 
-		struct ComponentRecord : avl_set_base_hook<optimize_size<true>> {
+		struct ComponentRecord {
 			string Name;
 			XComponent* Component;
 		
@@ -48,20 +48,9 @@ namespace Xanadu {
 				return boost::shared_ptr<XComponent>( Component );
 			}
 
-			friend bool operator<(const ComponentRecord& a, const ComponentRecord& b) {
-				return a.Name.compare(b.Name) < 0;
-			}
-		
-			friend bool operator>(const ComponentRecord& a, const ComponentRecord& b) {
-				return  a.Name.compare(b.Name) > 0;
-			}
-		
-			friend bool operator==(const ComponentRecord& a, const ComponentRecord& b) {
-				return a.Name.compare(b.Name) == 0;
-			}
 		};
 
-		struct ChildRecord : avl_set_base_hook<optimize_size<true>> {
+		struct ChildRecord {
 			string Name;
 			XThing* Child;
 
@@ -72,39 +61,8 @@ namespace Xanadu {
 			}
 
 
-			friend bool operator<(const ChildRecord& a, const ChildRecord& b) {
-				return a.Name.compare(b.Name) < 0;
-			}
-
-			friend bool operator>(const ChildRecord& a, const ChildRecord& b) {
-				return  a.Name.compare(b.Name) > 0;
-			}
-
-			friend bool operator==(const ChildRecord& a, const ChildRecord& b) {
-				return a.Name.compare(b.Name) == 0;
-			}
 
 		};
-
-		struct MatchName {
-			bool operator() (const ComponentRecord& comp, const string& name) {
-				return comp.Name.compare(name) == 0;
-			}
-		
-			bool operator() (const string& name, const ComponentRecord& comp) {
-				return name.compare(comp.Name) == 0;
-			}
-
-			bool operator() (const ChildRecord& comp, const string& name) {
-				return comp.Name.compare(name) == 0;
-			}
-
-			bool operator() (const string& name, const ChildRecord& comp) {
-				return name.compare(comp.Name) == 0;
-			}
-
-		};
-
 
 		class XANADU_API XIndividual :	public XThing
 		{
@@ -112,16 +70,21 @@ namespace Xanadu {
 			XIndividual();
 			virtual ~XIndividual();
 
-			Transform GetTransform() const {
+			Transform* GetTransform() const 
+			{
 				return _transform;
+			}
+
+			void SetTransform(Transform* newTransform) 
+			{
+				_transform = newTransform;
 			}
 
 			template <typename T>
 			boost::shared_ptr<T> FindComponent(string name) {
 				BOOST_STATIC_ASSERT((boost::is_base_of<XComponent, T>::value));
-				auto iter = _comps.find(name, MatchName());
-				if (iter != _comps.end()) {
-					return boost::shared_ptr<T>( (*iter).Component );
+				for (auto iter = _comps->begin(); iter != _comps->end(); ++iter) {
+					if ((*iter).Name.compare(name) == 0) return shared_ptr<T>(*iter);
 				}
 				return shared_ptr<T>();
 			}
@@ -129,17 +92,21 @@ namespace Xanadu {
 			template <typename T>
 			boost::shared_ptr<T> FindChild(string name) {
 				BOOST_STATIC_ASSERT((boost::is_base_of<XThing, T>::value));
-				auto iter = _children.find(name, MatchName());
-				if (iter != _comps.end()) {
-					return boost::shared_ptr<T>( (*iter).Child );
+				for (auto iter = _children->begin(); iter != _children->end(); ++iter) {
+					if ((*iter).Name.compare(name) == 0) return shared_ptr<T>(*iter);
 				}
 				return shared_ptr<T>();
 			}
 
+			void AddComponent(XComponent* comp) {
+				_comps->push_back(ComponentRecord(comp));
+			}
+
+
 		private:
-			Transform _transform;
-			avltree<ComponentRecord> _comps;
-			avltree<ChildRecord> _children;
+			Transform* _transform;
+			vector<ComponentRecord>* _comps;
+			vector<ChildRecord>* _children;
 		};
 	}
 }
