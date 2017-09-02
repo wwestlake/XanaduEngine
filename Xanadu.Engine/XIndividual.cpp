@@ -22,6 +22,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Xanadu {
 	namespace Engine {
+		ComponentRecord::ComponentRecord(XComponent* comp) {
+			Component = comp;
+			Name = comp->GetName();
+		}
+
+		ChildRecord::ChildRecord(XThing* child) {
+			Child = child;
+		}
+
+
 
 		XIndividual::XIndividual() 
 		{

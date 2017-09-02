@@ -21,15 +21,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 #include "defines.h"
 #include "XThing.h"
+#include <string>
 
 namespace Xanadu {
 	namespace Engine {
 
+		using namespace std;
+
 		class  XANADU_API  XComponent : public XThing
 		{
 		public:
-			XComponent();
+			XComponent(string name) : _name(name) {}
 			~XComponent();
+
+			string GetName() 
+			{
+				return _name;
+			}
+
+		protected:
+			string _name;
+
 		};
 
 	}
