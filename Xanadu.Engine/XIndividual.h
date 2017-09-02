@@ -84,7 +84,7 @@ namespace Xanadu {
 			boost::shared_ptr<T> FindComponent(string name) {
 				BOOST_STATIC_ASSERT((boost::is_base_of<XComponent, T>::value));
 				for (auto iter = _comps->begin(); iter != _comps->end(); ++iter) {
-					if ((*iter).Name.compare(name) == 0) return shared_ptr<T>(*iter);
+					if ((*iter).Name.compare(name) == 0) return shared_ptr<T>(iter->Component);
 				}
 				return shared_ptr<T>();
 			}
@@ -93,7 +93,7 @@ namespace Xanadu {
 			boost::shared_ptr<T> FindChild(string name) {
 				BOOST_STATIC_ASSERT((boost::is_base_of<XThing, T>::value));
 				for (auto iter = _children->begin(); iter != _children->end(); ++iter) {
-					if ((*iter).Name.compare(name) == 0) return shared_ptr<T>(*iter);
+					if ((*iter).Name.compare(name) == 0) return shared_ptr<T>(iter->Child);
 				}
 				return shared_ptr<T>();
 			}
