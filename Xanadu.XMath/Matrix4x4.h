@@ -47,6 +47,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define C3R2 14
 #define C3R3 15
 
+#define ELEM(COL, ROW) (COL * 4 + ROW)
+
 namespace Xanadu {
 	namespace XMath {
 
@@ -59,11 +61,18 @@ namespace Xanadu {
 				for (int i = 0; i < 16; i++) _elem[i] = 0;
 			}
 
+			Matrix4x4(float floats[4][4]) {
+				for (int i = 0; i < 4; i++)
+					for (int j = 0; j < 4; j++)
+						_elem[i * 4 + j] = floats[i][j];
+
+			}
+
 			Matrix4x4(
-				float c0r0, float c0r1, float c0r2, float c0r3,
-				float c1r0, float c1r1, float c1r2, float c1r3,
-				float c2r0, float c2r1, float c2r2, float c2r3,
-				float c3r0, float c3r1, float c3r2, float c3r3
+				float c0r0, float c1r0, float c2r0, float c3r0,
+				float c0r1, float c1r1, float c2r1, float c3r1,
+				float c0r2, float c1r2, float c2r2, float c3r2,
+				float c0r3, float c1r3, float c2r3, float c3r3
 				) 
 			{
 				_elem[C0R0] = c0r0;
@@ -108,6 +117,15 @@ namespace Xanadu {
 				return _elem.data();
 			}
 
+			Matrix4x4 Transpose() const {
+				return Matrix4x4(
+					_elem[C0R0], _elem[C0R1], _elem[C0R2], _elem[C0R3],
+					_elem[C1R0], _elem[C1R1], _elem[C1R2], _elem[C1R3],
+					_elem[C2R0], _elem[C2R1], _elem[C2R2], _elem[C2R3],
+					_elem[C3R0], _elem[C3R1], _elem[C3R2], _elem[C3R3]
+				);
+			}
+
 			Matrix4x4 operator+(const Matrix4x4& b)
 			{
 				auto result = Matrix4x4();
@@ -137,6 +155,35 @@ namespace Xanadu {
 				}
 				return result;
 			}
+
+			float get(int c, int r) 
+			{
+				return _elem[c * 4 + r];
+			}
+
+			void set(int c, int r, float value) 
+			{
+				_elem[c * 4 + r] = value;
+			}
+
+
+			Matrix4x4 operator*(const Matrix4x4& b) 
+			{
+				float result[4][4];
+				for (int i = 0; i < 4; i++)
+				{
+					for (int j = 0; j < 4; j++) 
+					{
+						result[i][j] = 0;
+						for (int k = 0; k < 4; k++) 
+						{
+							result[i][j] += _elem[ELEM(i, j)] * b._elem[ELEM(k, j)];
+						}
+					}
+				}
+				return Matrix4x4(result);
+			}
+
 
 			Matrix4x4& operator+=(const Matrix4x4& rhs) 
 			{

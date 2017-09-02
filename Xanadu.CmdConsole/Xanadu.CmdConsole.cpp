@@ -59,6 +59,14 @@ int main() {
 	auto yrot = Xanadu::XMath::Quaternion(DEG2RAD(180), 0, 1, 0);
 	auto zrot = Xanadu::XMath::Quaternion(DEG2RAD(180), 0, 0, 1);
 
+	auto checktrans = Xanadu::XMath::Matrix4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+
+	auto test = checktrans * checktrans.Transpose();
+	cout << test << endl;
+
+	cout << checktrans << endl;
+	cout << checktrans.Transpose() << endl;
+
 	cout << mat << endl;
 
 	auto rotmatx = mat.MakeRotation(xrot);
