@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include <string>
 #include <boost/intrusive/avltree.hpp>
+#include "Xanadu.XMath/Matrix4x4.h"
 
 using namespace std;
 using namespace boost::intrusive;
@@ -47,31 +48,26 @@ struct GreaterThan {
 	}
 };
 
-
+#define PI 3.141592658
+#define DEG2RAD(deg) (deg * (PI / 180.0))
 
 
 int main() {
-	tree_t tree;
 
-	for (int i = 1; i <= 10; i++) {
-		tree.push_back(*(new Record( i * 10, false)));
-	}
+	auto mat = Xanadu::XMath::Matrix4x4::Identity();
+	auto xrot = Xanadu::XMath::Quaternion(DEG2RAD(180), 1, 0, 0);
+	auto yrot = Xanadu::XMath::Quaternion(DEG2RAD(180), 0, 1, 0);
+	auto zrot = Xanadu::XMath::Quaternion(DEG2RAD(180), 0, 0, 1);
 
-	auto a = tree.find(65, GreaterThan());
-	//auto b = tree.find(GreaterThan(), 65);
+	cout << mat << endl;
 
-	if (a != tree.end()) {
-		cout << "Found: " << (*a).size << endl;
-	}
+	auto rotmatx = mat.MakeRotation(xrot);
+	auto rotmaty = mat.MakeRotation(yrot);
+	auto rotmatz = mat.MakeRotation(zrot);
 
-	for (auto iter = tree.begin(); iter != tree.end(); ++iter) {
-		std::cout << "Loaded: " << (*iter).size << std::endl;
-	}
-
-
-	for (; a != tree.end(); ++a) {
-		std::cout << (*a).size << std::endl;
-	}
+	cout << rotmatx << endl;
+	cout << rotmaty << endl;
+	cout << rotmatz << endl;
 
 
 
