@@ -1,3 +1,5 @@
+
+
 /***************************************************************************************
 Xanadu Open GL Windows Game Engine
 Copyright (C) 2017  William W. Westlake Jr.
@@ -17,47 +19,39 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 
-
-#include "XIndividual.h"
 #include "MessageDispatcher.h"
-#include <iostream>
-#include "SystemLogger.h"
-
-
+#include <boost/signals2/signal.hpp>
+#include <boost/bind.hpp>
 
 namespace Xanadu {
 	namespace Engine {
 
-		namespace utils = Xanadu::Utilities;
+		boost::shared_ptr<MessageDispatcher> _instance;
+		MessageDispatcher::MessageDispatcher() {}
+		boost::signals2::signal<void(float)> _tick;
 
-		ComponentRecord::ComponentRecord(XComponent* comp) {
-			Component = comp;
-			Name = comp->GetName();
-		}
 
-		ChildRecord::ChildRecord(XThing* child) {
-			Child = child;
-		}
-
-		XIndividual::XIndividual() 
+		boost::shared_ptr<MessageDispatcher> MessageDispatcher::GetInstance()
 		{
-			_transform = new Transform();
-			_comps = new vector<ComponentRecord>();
-			_children = new vector<ChildRecord>();
-			MessageDispatcher::GetInstance()->ConnectTick(this, &XIndividual::Tick);
+			if (nullptr == _instance) _instance = boost::shared_ptr<MessageDispatcher>( new MessageDispatcher() );
+			return boost::shared_ptr<MessageDispatcher>(_instance);
 		}
 
-
-		XIndividual::~XIndividual()
+		void MessageDispatcher::ConnectTick(XIndividual* me, void(XIndividual::*tickhandler)(float))
 		{
-			delete _comps;
-			delete _children;
+			_tick.connect(boost::bind(tickhandler, me, _1));
 		}
 
-		void XIndividual::Tick(float deltaTime) {
-			auto log = util::SystemLogger::Instance();
-			log->Info("Got Tick");
+		void MessageDispatcher::ConnectTick(XComponent* me, void(XComponent::*tickhandler)(float))
+		{
+			_tick.connect(boost::bind(tickhandler, me, _1));
 		}
+
+		void MessageDispatcher::Tick(float deltaTime) 
+		{
+			_tick(deltaTime);
+		}
+
 
 	}
 }

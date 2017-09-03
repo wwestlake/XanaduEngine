@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/shared_ptr.hpp>
 #include "XMemoryManager.h"
 #include "XIndividual.h"
+#include "MessageDispatcher.h"
 
 namespace util = Xanadu::Utilities;
 
@@ -47,13 +48,16 @@ namespace Xanadu {
 				return DefWindowProc(hwnd, msg, wParam, lParam);
 		}
 
+		XIndividual* test;
+
 		GLApp::GLApp()
 		{
-			MemoryHandle<XIndividual> test;
+			test = new XIndividual();
 		}
 
 		GLApp::GLApp(HINSTANCE hInstance)
 		{
+			test = new XIndividual();
 			m_hAppInstance = hInstance;
 			m_hAppWnd = NULL;
 			m_hDevContext = NULL;
@@ -89,6 +93,7 @@ namespace Xanadu {
 					__int64 curTime = 0;
 					QueryPerformanceCounter((LARGE_INTEGER*)&curTime);
 					float deltaTime = (curTime - prevTime) * secondsPerCount;
+					MessageDispatcher::GetInstance()->Tick(deltaTime);
 					Update(deltaTime);
 					Render();
 					CalculateFPS(deltaTime);

@@ -1,3 +1,6 @@
+#ifndef XANADU_SINGLE_INCLUDE_MESSAGEDISPATCHER_H
+#define XANADU_SINGLE_INCLUDE_MESSAGEDISPATCHER_H
+
 /***************************************************************************************
 Xanadu Open GL Windows Game Engine
 Copyright (C) 2017  William W. Westlake Jr.
@@ -17,47 +20,34 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 
-
+#include "defines.h"
+#include <boost/shared_ptr.hpp>
 #include "XIndividual.h"
-#include "MessageDispatcher.h"
-#include <iostream>
-#include "SystemLogger.h"
-
-
+#include "XComponent.h"
 
 namespace Xanadu {
 	namespace Engine {
 
-		namespace utils = Xanadu::Utilities;
 
-		ComponentRecord::ComponentRecord(XComponent* comp) {
-			Component = comp;
-			Name = comp->GetName();
-		}
+		class XANADU_API MessageDispatcher {
+		public:
+			
+			static boost::shared_ptr<MessageDispatcher> GetInstance();
+			
+			void ConnectTick(XIndividual* me, void(XIndividual::*tickhandler)(float));
+			void ConnectTick(XComponent* me, void(XComponent::*tickhandler)(float));
 
-		ChildRecord::ChildRecord(XThing* child) {
-			Child = child;
-		}
+			void Tick(float deltaTime);
 
-		XIndividual::XIndividual() 
-		{
-			_transform = new Transform();
-			_comps = new vector<ComponentRecord>();
-			_children = new vector<ChildRecord>();
-			MessageDispatcher::GetInstance()->ConnectTick(this, &XIndividual::Tick);
-		}
+		protected:
+			MessageDispatcher();
 
+		};
 
-		XIndividual::~XIndividual()
-		{
-			delete _comps;
-			delete _children;
-		}
-
-		void XIndividual::Tick(float deltaTime) {
-			auto log = util::SystemLogger::Instance();
-			log->Info("Got Tick");
-		}
 
 	}
 }
+
+
+#endif
+

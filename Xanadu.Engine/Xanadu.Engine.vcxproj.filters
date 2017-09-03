@@ -64,6 +64,9 @@
     <ClInclude Include="XMemoryManager.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="MessageDispatcher.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -97,6 +100,9 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="XMemory.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageDispatcher.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>

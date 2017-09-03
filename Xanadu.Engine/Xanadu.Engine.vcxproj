@@ -149,6 +149,7 @@
     <ClInclude Include="GLApp.h" />
     <ClInclude Include="GLUtil.h" />
     <ClInclude Include="Guid.h" />
+    <ClInclude Include="MessageDispatcher.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SystemLogger.h" />
     <ClInclude Include="targetver.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GLApp.cpp" />
     <ClCompile Include="GLUtil.cpp" />
+    <ClCompile Include="MessageDispatcher.cpp" />
     <ClCompile Include="SystemLogger.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="XAllocator.cpp" />
