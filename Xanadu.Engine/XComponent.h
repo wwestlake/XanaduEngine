@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 #include "defines.h"
 #include "XThing.h"
+#include "Transform.h"
 #include <string>
 
 namespace Xanadu {
@@ -31,7 +32,7 @@ namespace Xanadu {
 		class  XANADU_API  XComponent : public XThing
 		{
 		public:
-			XComponent(string name) : _name(name) {}
+			XComponent(string name);
 			~XComponent();
 
 			string GetName() 
@@ -41,6 +42,12 @@ namespace Xanadu {
 
 		protected:
 			string _name;
+			Transform* _transform;
+
+			virtual void Tick(float deltaTime);
+			virtual void BeginPlay();
+			virtual void Update(float deltaTime);
+			virtual void Render(float deltaTime);
 
 		};
 

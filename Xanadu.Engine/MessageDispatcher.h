@@ -34,10 +34,19 @@ namespace Xanadu {
 			
 			static boost::shared_ptr<MessageDispatcher> GetInstance();
 			
-			void ConnectTick(XIndividual* me, void(XIndividual::*tickhandler)(float));
-			void ConnectTick(XComponent* me, void(XComponent::*tickhandler)(float));
+			void ConnectTick(XIndividual* me, void(XIndividual::*handler)(float));
+			void ConnectTick(XComponent* me, void(XComponent::*handler)(float));
+			void ConnectBeginPlay(XIndividual* me, void(XIndividual::*handler)());
+			void ConnectBeginPlay(XComponent* me, void(XComponent::*handler)());
+			void ConnectUpdate(XIndividual* me, void(XIndividual::*handler)(float));
+			void ConnectUpdate(XComponent* me, void(XComponent::*handler)(float));
+			void ConnectRender(XIndividual* me, void(XIndividual::*handler)(float));
+			void ConnectRender(XComponent* me, void(XComponent::*handler)(float));
 
 			void Tick(float deltaTime);
+			void BeginPlay();
+			void Update(float deltaTime);
+			void Render(float deltaTime);
 
 		protected:
 			MessageDispatcher();

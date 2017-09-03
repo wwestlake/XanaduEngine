@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "XIndividual.h"
 #include "MessageDispatcher.h"
 #include <iostream>
+#include <sstream>
 #include "SystemLogger.h"
 
 
@@ -45,6 +46,9 @@ namespace Xanadu {
 			_comps = new vector<ComponentRecord>();
 			_children = new vector<ChildRecord>();
 			MessageDispatcher::GetInstance()->ConnectTick(this, &XIndividual::Tick);
+			MessageDispatcher::GetInstance()->ConnectBeginPlay(this, &XIndividual::BeginPlay);
+			MessageDispatcher::GetInstance()->ConnectRender(this, &XIndividual::Render);
+			MessageDispatcher::GetInstance()->ConnectUpdate(this, &XIndividual::Update);
 		}
 
 
@@ -55,8 +59,15 @@ namespace Xanadu {
 		}
 
 		void XIndividual::Tick(float deltaTime) {
-			auto log = util::SystemLogger::Instance();
-			log->Info("Got Tick");
+		}
+
+		void XIndividual::BeginPlay() {
+		}
+
+		void XIndividual::Update(float deltaTime) {
+		}
+
+		void XIndividual::Render(float deltaTime) {
 		}
 
 	}

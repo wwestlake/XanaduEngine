@@ -102,7 +102,11 @@ namespace Xanadu {
 				_comps->push_back(ComponentRecord(comp));
 			}
 
+		protected:
 			virtual void Tick(float deltaTime);
+			virtual void BeginPlay();
+			virtual void Update(float deltaTime);
+			virtual void Render(float deltaTime);
 
 		private:
 			Transform* _transform;

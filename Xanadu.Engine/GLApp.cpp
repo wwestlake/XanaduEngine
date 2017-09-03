@@ -73,8 +73,15 @@ namespace Xanadu {
 		{
 		}
 
+		boost::shared_ptr< MessageDispatcher > dispatcher = nullptr;
+
 		int GLApp::Run()
 		{
+			if (nullptr == dispatcher) {
+				dispatcher = MessageDispatcher::GetInstance();
+			}
+			dispatcher->BeginPlay();
+
 			__int64 prevTime = 0;
 			QueryPerformanceCounter((LARGE_INTEGER*)&prevTime);
 			__int64 countsPerSec = 0;
@@ -93,13 +100,16 @@ namespace Xanadu {
 					__int64 curTime = 0;
 					QueryPerformanceCounter((LARGE_INTEGER*)&curTime);
 					float deltaTime = (curTime - prevTime) * secondsPerCount;
-					MessageDispatcher::GetInstance()->Tick(deltaTime);
+
+					dispatcher->Tick(deltaTime);
+					dispatcher->Update(deltaTime);
+					dispatcher->Render(deltaTime);
+
 					Update(deltaTime);
 					Render();
+
 					CalculateFPS(deltaTime);
-
 					SwapBuffers(m_hDevContext);
-
 					prevTime = curTime;
 				}
 			}

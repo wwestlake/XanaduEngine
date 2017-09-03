@@ -29,6 +29,9 @@ namespace Xanadu {
 		boost::shared_ptr<MessageDispatcher> _instance;
 		MessageDispatcher::MessageDispatcher() {}
 		boost::signals2::signal<void(float)> _tick;
+		boost::signals2::signal<void()> _beginPlay;
+		boost::signals2::signal<void(float)> _update;
+		boost::signals2::signal<void(float)> _render;
 
 
 		boost::shared_ptr<MessageDispatcher> MessageDispatcher::GetInstance()
@@ -47,11 +50,56 @@ namespace Xanadu {
 			_tick.connect(boost::bind(tickhandler, me, _1));
 		}
 
-		void MessageDispatcher::Tick(float deltaTime) 
+
+		void MessageDispatcher::ConnectBeginPlay(XIndividual* me, void(XIndividual::*handler)()) 
+		{
+			_beginPlay.connect(boost::bind(handler, me));
+		}
+
+		void MessageDispatcher::ConnectBeginPlay(XComponent* me, void(XComponent::*handler)())
+		{
+			_beginPlay.connect(boost::bind(handler, me));
+		}
+
+		void MessageDispatcher::ConnectUpdate(XIndividual* me, void(XIndividual::*handler)(float))
+		{
+			_update.connect(boost::bind(handler, me, _1));
+		}
+
+		void MessageDispatcher::ConnectUpdate(XComponent* me, void(XComponent::*handler)(float))
+		{
+			_update.connect(boost::bind(handler, me, _1));
+		}
+
+		void MessageDispatcher::ConnectRender(XIndividual* me, void(XIndividual::*handler)(float))
+		{
+			_render.connect(boost::bind(handler, me, _1));
+		}
+
+		void MessageDispatcher::ConnectRender(XComponent* me, void(XComponent::*handler)(float))
+		{
+			_render.connect(boost::bind(handler, me, _1));
+		}
+
+		void MessageDispatcher::BeginPlay()
+		{
+			_beginPlay();
+		}
+
+		void MessageDispatcher::Tick(float deltaTime)
 		{
 			_tick(deltaTime);
 		}
 
+		void MessageDispatcher::Update(float deltaTime)
+		{
+			_update(deltaTime);
+		}
+
+		void MessageDispatcher::Render(float deltaTime)
+		{
+			_render(deltaTime);
+		}
 
 	}
 }

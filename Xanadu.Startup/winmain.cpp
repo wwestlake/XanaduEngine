@@ -4,6 +4,8 @@
 #include "Colors.h"
 #include "FileManager.h"
 #include "SystemLogger.h"
+#include "MessageDispatcher.h"
+
 
 #include <list>
 #include <boost/filesystem.hpp>

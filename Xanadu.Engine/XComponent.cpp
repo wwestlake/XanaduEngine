@@ -21,12 +21,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "stdafx.h"
 #include "XComponent.h"
 
+#include "MessageDispatcher.h"
+
 namespace Xanadu {
 	namespace Engine {
+
+		XComponent::XComponent(string name) : _name(name) 
+		{
+			_transform = new Transform();
+
+			MessageDispatcher::GetInstance()->ConnectTick(this, &XComponent::Tick);
+			MessageDispatcher::GetInstance()->ConnectBeginPlay(this, &XComponent::BeginPlay);
+			MessageDispatcher::GetInstance()->ConnectRender(this, &XComponent::Render);
+			MessageDispatcher::GetInstance()->ConnectUpdate(this, &XComponent::Update);
+		}
 
 		XComponent::~XComponent()
 		{
 		}
 
+		void XComponent::Tick(float deltaTime) {
+		}
+
+		void XComponent::BeginPlay() {
+		}
+
+		void XComponent::Update(float deltaTime) {
+		}
+
+		void XComponent::Render(float deltaTime) {
+		}
 	}
 }

@@ -73,6 +73,7 @@
     <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\x64\Debug;E:\boost_1_64_0\stage\x64\lib;$(LibraryPath)</LibraryPath>
     <ReferencePath>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.Engine\x64\Debug;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\x64\Debug;$(ReferencePath)</ReferencePath>
+    <ExecutablePath>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.XMath;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -90,7 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\boost_1_64_0;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\boost_1_64_0;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.Engine;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.XMath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Xanadu.XMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
