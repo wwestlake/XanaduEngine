@@ -27,18 +27,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 #include <boost/static_assert.hpp>
+#include <exception>
 
 namespace Xanadu {
 	namespace Engine {
 
 		using namespace boost;
 
-		class XANADU_API out_of_memory_exception {};
+		struct XANADU_API out_of_memory_exception : public std::exception {
+			const char * what() const throw () {
+				return "XMemoryManager: Out of memory";
+			}
+		};
 
 		struct allocation;
 		struct alloc_state;
 
-		class XMemoryManager {
+		class XANADU_API XMemoryManager {
 		public:
 			XMemoryManager(size_t page_size, size_t num_pages);
 

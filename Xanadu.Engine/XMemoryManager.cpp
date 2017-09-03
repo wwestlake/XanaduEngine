@@ -19,26 +19,58 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "XMemoryManager.h"
 #include <vector>
-
+#include <boost/intrusive/avltree.hpp>
 
 namespace Xanadu {
 	namespace Engine {
 
-		struct allocation {
+		namespace avl = boost::intrusive;
+
+		struct allocation : avl::avl_set_base_hook<avl::optimize_size<true>> {
 			char* address;
 			size_t size;
 			size_t page;
 			bool in_use;
+
+			friend bool operator <(const allocation& a, const allocation& b)
+			{
+				return a.size < b.size;
+			}
+
+			friend bool operator >(const allocation& a, const allocation& b)
+			{
+				return a.size > b.size;
+			}
+
+			friend bool operator ==(const allocation& a, const allocation& b)
+			{
+				return a.size == b.size;
+			}
+
+
+		};
+	
+		struct alloc_state {
+			avl::avltree<allocation> allocations;
 		};
 
-		struct alloc_state {
-			vector<allocation*> allocations;
+		struct FindAllocationBySize {
+			bool operator()(size_t size, const allocation& alloc) const
+			{
+				return !alloc.in_use && (alloc.size <= size);
+			}
+			bool operator()(const allocation& alloc, size_t size) const
+			{
+				return !alloc.in_use && (alloc.size <= size);
+			}
 		};
+
 
 		allocation* XMemoryManager::find(size_t size)
 		{
-			for (auto iter = state->allocations.begin(); iter != state->allocations.end(); ++iter) {
-				if (!(*iter)->in_use && (*iter)->size >= size) return *iter;
+			auto iter = state->allocations.find(size, FindAllocationBySize());
+			if (iter != state->allocations.end()) {
+				return &*iter;
 			}
 			return nullptr;
 		}
@@ -46,7 +78,7 @@ namespace Xanadu {
 		allocation* XMemoryManager::find(char* ptr)
 		{
 			for (auto iter = state->allocations.begin(); iter != state->allocations.end(); ++iter) {
-				if ((*iter)->address == ptr) return *iter;
+				if ((*iter).address == ptr) return &*iter;
 			}
 			return nullptr;
 		}
@@ -63,6 +95,7 @@ namespace Xanadu {
 
 		char* XMemoryManager::Allocate(size_t size)
 		{
+			size += 4;
 			auto alloc = find(size);
 			if (alloc != nullptr) {
 				alloc->in_use = true;
@@ -81,12 +114,12 @@ namespace Xanadu {
 						alloc->in_use = true;
 						alloc->size = size;
 						alloc->page = i;
-						state->allocations.push_back(alloc);
+						state->allocations.push_back(*alloc);
 						return result;
 					}
 				}
 			}
-			throw new out_of_memory_exception();
+			throw out_of_memory_exception();
 		}
 
 		void XMemoryManager::Deallocate(char* address)

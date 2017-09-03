@@ -73,7 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.XMath;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\Xanadu.Utilities;E:\boost_1_64_0;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\x64\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\x64\Debug;E:\boost_1_64_0\stage\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -98,6 +98,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\boost_1_64_0\stage\x64\lib;E:\Software Development\Visual Studio 2017\Projects\XanaduEngine\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

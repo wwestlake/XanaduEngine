@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/static_assert.hpp>
 #include <boost/shared_ptr.hpp>
 #include "XThing.h"
+#include "XMemoryManager.h"
 
 namespace Xanadu {
 	namespace Engine {
@@ -40,17 +41,16 @@ namespace Xanadu {
 		class XANADU_API XAllocator {
 		public:
 			XAllocator();
+			XAllocator(size_t page_size, size_t num_pages);
 
-			template <typename T> 
-			T* Allocate()
+			template <typename T> T* Allocate()
 			{
 				auto ptr = _manager->Allocate(sizeof(T));
 				T* t = new (ptr) T;
 				return t;
 			}
 
-			template <typename T>
-			void Dealocate(T* t)
+			template <typename T> void Dealocate(T* t)
 			{
 				_manager->Deallocate((char*)t);
 				t->T::~T();
