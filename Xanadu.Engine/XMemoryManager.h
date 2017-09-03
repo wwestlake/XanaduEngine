@@ -33,87 +33,29 @@ namespace Xanadu {
 
 		using namespace boost;
 
-		template <typename T>
-		struct XANADU_API MemoryHandle {
-			static_assert((boost::is_base_of<XThing, T>::value), "MemoryHandle Type Parameter must derive from XThing");
-			boost::shared_ptr<T> ptr;
+		class XANADU_API out_of_memory_exception {};
 
-		};
+		struct allocation;
+		struct alloc_state;
 
-		class out_of_memory_exception {};
-
-		// XMemoryManager provides an abstraction over memory managers that implement a variety 
-		// of memory management strategies.  Several strategies are provided below, additional
-		// strategies may be implemented by implementing this interface.
-		class XANADU_API XMemoryManager {
+		class XMemoryManager {
 		public:
+			XMemoryManager(size_t page_size, size_t num_pages);
 
-			XMemoryManager(size_t page_size, size_t num_pages)
-			{
-				memory = new XMemory(page_size, num_pages);
-			}
-
-			virtual boost::shared_ptr<char> Allocate(size_t size) = 0;
-			virtual void Deallocate(boost::shared_ptr<char> ptr) = 0;
+			char* Allocate(size_t size);
+			void Deallocate(char* address);
 
 		protected:
-			XMemory* memory;
+			allocation* find(size_t size);
+			allocation* find(char* ptr);
 
-			vector<PageRecord>& GetPages() {
-				return memory->pages;
-			}
 
+		private:
+			size_t _num_pages;
+			size_t _page_size;
+			XMemory** _memory;
+			alloc_state* state;
 		};
-
-		// A linear memory manager that allows reuse of existing blocks that have been deallocated 
-		// if the block is large enough, otherwise if allocates new storage.  This memory manager
-		// does no memory degragmentation and should be used for allocating long lived stable objects.
-		class XLinearMemoryManager : public XMemoryManager {
-		public:
-			XLinearMemoryManager(size_t page_size, size_t num_pages) : XMemoryManager(page_size, num_pages) {}
-
-			virtual boost::shared_ptr<char> Allocate(size_t size) override
-			{
-				auto pages = GetPages();
-
-				for (auto iter = pages.begin(); iter != pages.end(); ++iter) 
-				{
-					auto page = *iter;
-					auto alloc = page.allocations->find(size, Greater());
-					if (alloc != page.allocations->end()) 
-					{
-						auto rec = *alloc;
-						rec.in_use = true;
-						return boost::shared_ptr<char>(rec.location);
-					}
-					else 
-					{
-						auto free = (char*)page.free;
-						auto start = (char*)page.memory.get();
-
-						if (free + size > start + page.size) continue;
-
-						auto rec = new AllocationRecord();
-						rec->size = size;
-						rec->location = free;
-						rec->in_use = true;
-						page.allocations->push_back(*rec);
-						page.free = free + size;
-						memory->RegisterAllocationIndex(rec->location, rec);
-						return boost::shared_ptr<char>(rec->location);
-					}
-					throw out_of_memory_exception();
-				}
-			}
-
-			virtual void Deallocate(boost::shared_ptr<char> ptr) override
-			{
-				auto rec = memory->GetAllocationRecord(ptr.get());
-				rec->in_use = false;
-			}
-
-		};
-
 
 	}
 }

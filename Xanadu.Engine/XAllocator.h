@@ -30,40 +30,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/static_assert.hpp>
 #include <boost/shared_ptr.hpp>
 #include "XThing.h"
-#include "XMemoryManager.h"
 
 namespace Xanadu {
 	namespace Engine {
 
 		using namespace boost;
+		class XMemoryManager;
 
 		class XANADU_API XAllocator {
-
 		public:
-
-			XAllocator(XMemoryManager* manager) {
-				_manager = manager;
-			}
+			XAllocator();
 
 			template <typename T> 
-			boost::shared_ptr<T> Allocate() {
-				BOOST_STATIC_ASSERT((boost::is_base_of<XThing, T>::value));
+			T* Allocate()
+			{
 				auto ptr = _manager->Allocate(sizeof(T));
-				auto new_ptr = new (ptr.get(), &XAllocator::Deallocate) T;
-				return boost::shared_ptr<T>(new_ptr);
+				T* t = new (ptr) T;
+				return t;
 			}
 
 			template <typename T>
-			void Deallocate(T object) {
-				BOOST_STATIC_ASSERT((boost::is_base_of<XThing, T>::value));
-				T::~T();
-				_manager->Deallocate(object);
+			void Dealocate(T* t)
+			{
+				_manager->Deallocate((char*)t);
+				t->T::~T();
 			}
-
-		private:
+			
+		protected:
 			XMemoryManager* _manager;
-		};
 
+		};
 
 	}
 }

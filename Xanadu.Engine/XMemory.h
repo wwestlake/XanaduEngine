@@ -33,85 +33,38 @@ namespace Xanadu {
 		using namespace std;
 		using namespace boost::intrusive;
 
-		typedef char* memory_ptr;
-		typedef boost::shared_ptr< char > shared_memory_ptr;
-
-		struct AllocationRecord : public avl_set_base_hook<optimize_size<true>> {
-			memory_ptr location;
-			size_t size;
-			bool in_use;
-
-			friend bool operator< (const AllocationRecord& a, const AllocationRecord& b)
-			{
-				return a.size < b.size;
-			}
-			friend bool operator> (const AllocationRecord& a, const AllocationRecord& b)
-			{
-				return a.size > b.size;
-			}
-			friend bool operator== (const AllocationRecord& a, const AllocationRecord& b)
-			{
-				return a.size == b.size;
-			}
-
-		};
-
-		typedef avltree<AllocationRecord> tree_t;
-
-		struct Greater {
-			bool operator() (const AllocationRecord& rec, const size_t size) const
-			{
-				return !rec.in_use && (rec.size <= size);
-			}
-			bool operator() (const size_t size, const AllocationRecord& rec) const
-			{
-				return !rec.in_use && (size >= rec.size);
-			}
-		};
-
-		struct PageRecord {
-
-			PageRecord(shared_memory_ptr _memory, size_t _size) 
-			{
-				memory = _memory;
-				size = _size;
-				free = _memory.get();
-				allocations = new tree_t;
-			}
-
-			shared_memory_ptr memory;
-			size_t size;
-			memory_ptr free;
-			tree_t* allocations;
-		};
-
-		class XMemoryManager;
-
-		class XANADU_API XMemory {
+		class XMemory {
 		public:
-			XMemory(size_t page_size, size_t num_pages);
+			XMemory(size_t size);
 			~XMemory();
 
-			static void deleter(memory_ptr memory);
-
-			size_t GetAvailableMemory();
-
-			friend class XMemoryManager;
-
-			AllocationRecord* GetAllocationRecord(memory_ptr ptr) 
+			char* operator[](size_t index)
 			{
-				return allocation_index[ptr];
+				return &(_memory[index]);
 			}
-			
-			void RegisterAllocationIndex(memory_ptr ptr, AllocationRecord* rec) 
-			{
-				allocation_index[ptr] = rec;
+
+			char* GetFreePtr() {
+				return _free;
+			}
+
+			void SetFreePtr(char* free) {
+				_free = free;
+			}
+
+			size_t GetSize() {
+				return _size;
+			}
+
+			bool IsAvailable(size_t size) {
+				return ((size_t)_free + size) < ((size_t)_memory + _size);
 			}
 
 		private:
-			vector<PageRecord> pages;
-			std::map<memory_ptr, AllocationRecord*> allocation_index;
+			char* _memory;
+			char* _free;
+			size_t _size;
 		};
+
 
 	}
 }

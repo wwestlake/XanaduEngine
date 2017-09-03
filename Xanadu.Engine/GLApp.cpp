@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "XMemoryManager.h"
 #include "XIndividual.h"
 #include "MessageDispatcher.h"
+#include "XAllocator.h"
 
 namespace util = Xanadu::Utilities;
 
@@ -52,12 +53,15 @@ namespace Xanadu {
 
 		GLApp::GLApp()
 		{
-			test = new XIndividual();
+			XAllocator alloc;
+			test = alloc.Allocate<XIndividual>();
 		}
 
 		GLApp::GLApp(HINSTANCE hInstance)
 		{
-			test = new XIndividual();
+			XAllocator alloc;
+			test = alloc.Allocate<XIndividual>();
+
 			m_hAppInstance = hInstance;
 			m_hAppWnd = NULL;
 			m_hDevContext = NULL;

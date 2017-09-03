@@ -187,6 +187,7 @@
     <ClCompile Include="XComponent.cpp" />
     <ClCompile Include="XIndividual.cpp" />
     <ClCompile Include="XMemory.cpp" />
+    <ClCompile Include="XMemoryManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xanadu.Utilities\Xanadu.Utilities.vcxproj">

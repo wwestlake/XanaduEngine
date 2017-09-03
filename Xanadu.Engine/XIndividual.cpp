@@ -59,15 +59,27 @@ namespace Xanadu {
 		}
 
 		void XIndividual::Tick(float deltaTime) {
+			//std::stringstream fmt;
+			//fmt << "Got tick: " << deltaTime;
+			//utils::SystemLogger::Instance()->Info(fmt.str());
 		}
 
 		void XIndividual::BeginPlay() {
+			std::stringstream fmt;
+			fmt << "Begin Play: ";
+			utils::SystemLogger::Instance()->Info(fmt.str());
 		}
 
 		void XIndividual::Update(float deltaTime) {
+			//std::stringstream fmt;
+			//fmt << "Got Update: " << deltaTime;
+			//utils::SystemLogger::Instance()->Info(fmt.str());
 		}
 
 		void XIndividual::Render(float deltaTime) {
+			//std::stringstream fmt;
+			//fmt << "Got Render: " << deltaTime;
+			//utils::SystemLogger::Instance()->Info(fmt.str());
 		}
 
 	}

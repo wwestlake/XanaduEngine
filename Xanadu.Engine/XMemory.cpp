@@ -23,33 +23,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Xanadu {
 	namespace Engine {
-
-
-		XMemory::XMemory(size_t page_size, size_t num_pages) 
+		XMemory::XMemory(size_t size)
 		{
-			for (size_t i = 0; i < num_pages; i++)
-			{
-				memory_ptr ptr = (memory_ptr)malloc(page_size);
-				PageRecord rec(shared_memory_ptr( ptr, &XMemory::deleter ), page_size);
-				pages.push_back(rec);
-			}
+			_size = size;
+			_memory = (char*)malloc(size);
+			_free = _memory;
 		}
 
-		XMemory::~XMemory() 
+		XMemory::~XMemory()
 		{
+			free(_memory);
 		}
 
-		void XMemory::deleter(memory_ptr memory) {
-			free(memory);
-		}
 
-		size_t XMemory::GetAvailableMemory() {
-			size_t result = 0;
-			for (auto iter = pages.begin(); iter != pages.end(); ++iter) {
-				result += (*iter).size;
-			}
-			return result;
-		}
 	}
 }
 

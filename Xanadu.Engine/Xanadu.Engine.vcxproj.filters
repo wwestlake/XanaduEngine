@@ -105,5 +105,6 @@
     <ClCompile Include="MessageDispatcher.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="XMemoryManager.cpp" />
   </ItemGroup>
 </Project>
