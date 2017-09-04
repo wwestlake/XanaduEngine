@@ -39,12 +39,12 @@ struct GreaterThan {
 	bool operator() (const Record& rec, const size_t size) const
 	{
 		std::cout << "A: " << rec.size << std::endl;
-		return !rec.in_use && (rec.size <= size);
+		return (rec.size <= size);
 	}
 	bool operator() (const size_t size, const Record& rec) const
 	{
 		std::cout << "B: " << rec.size << std::endl;
-		return !rec.in_use && (size >= rec.size);
+		return (size >= rec.size);
 	}
 };
 
@@ -54,31 +54,34 @@ struct GreaterThan {
 
 int main() {
 
-	auto mat = Xanadu::XMath::Matrix4x4::Identity();
-	auto xrot = Xanadu::XMath::Quaternion(DEG2RAD(180), 1, 0, 0);
-	auto yrot = Xanadu::XMath::Quaternion(DEG2RAD(180), 0, 1, 0);
-	auto zrot = Xanadu::XMath::Quaternion(DEG2RAD(180), 0, 0, 1);
 
-	auto checktrans = Xanadu::XMath::Matrix4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+	Record a1(10, true);
+	Record a2(20, true);
+	Record a3(30, true);
+	Record a4(40, true);
+	Record a5(50, false);
+	Record a6(60, false);
 
-	auto test = checktrans * checktrans.Transpose();
-	cout << test << endl;
+	tree_t tree;
 
-	cout << checktrans << endl;
-	cout << checktrans.Transpose() << endl;
+	tree.push_back(a1);
+	tree.push_back(a2);
+	tree.push_back(a3);
+	tree.push_back(a4);
+	tree.push_back(a5);
+	tree.push_back(a6);
 
-	cout << mat << endl;
+	auto a = tree.find(35, GreaterThan());
 
-	auto rotmatx = mat.MakeRotation(xrot);
-	auto rotmaty = mat.MakeRotation(yrot);
-	auto rotmatz = mat.MakeRotation(zrot);
+	if (a != tree.end() //&& !(*a).in_use
+		) {
 
-	cout << rotmatx << endl;
-	cout << rotmaty << endl;
-	cout << rotmatz << endl;
+		std::cout << (*a).size << std::endl;
 
-
-
+	}
+	else {
+		std::cout << "Not found" << std::endl;
+	}
 	char in[255];
 	std::cin >> in;
 

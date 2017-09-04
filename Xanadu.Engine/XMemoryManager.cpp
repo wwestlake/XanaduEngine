@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "XMemoryManager.h"
 #include <vector>
 #include <boost/intrusive/avltree.hpp>
+#include <iostream>
+#include <map>
 
 namespace Xanadu {
 	namespace Engine {
@@ -54,16 +56,17 @@ namespace Xanadu {
 			avl::avltree<allocation> allocations;
 			XMemory* _internal_memory;
 			vector<XMemory*> _memory;
+			map<char*, allocation*> addr_alloc_map;
 		};
 
 		struct FindAllocationBySize {
 			bool operator()(size_t size, const allocation& alloc) const
 			{
-				return !alloc.in_use && (alloc.size <= size);
+				return (!alloc.in_use) && (alloc.size >= size);
 			}
 			bool operator()(const allocation& alloc, size_t size) const
 			{
-				return !alloc.in_use && (alloc.size <= size);
+				return (!alloc.in_use) && (alloc.size >= size);
 			}
 		};
 
@@ -86,7 +89,7 @@ namespace Xanadu {
 		{
 			auto iter = state->allocations.find(size, FindAllocationBySize());
 			if (iter != state->allocations.end()) {
-				return &*iter;
+				if (! (*iter).in_use) return &*iter;
 			}
 			return nullptr;
 		}
@@ -112,37 +115,43 @@ namespace Xanadu {
 
 		char* XMemoryManager::Allocate(size_t size)
 		{
-			size += 4;
-			auto alloc = find(size);
+			size_t _size = size + 4;
+			auto alloc = find(_size);
 			if (alloc != nullptr) {
+				std::cout << "Allocating object" << std::endl;
 				alloc->in_use = true;
 				return alloc->address;
 			}
 			else 
 			{
-				for (int i = 0; i < _num_pages; i++) {
-					if (state->_memory[i]->IsAvailable(size)) {
-						char* result = state->_memory[i]->GetFreePtr();
+				int i = 0;
+				for (auto iter = state->_memory.begin(); iter != state->_memory.end(); ++iter) {
+					if ((*iter)->IsAvailable(size)) {
+						char* result = (*iter)->GetFreePtr();
 						char* newfreeptr = result + size;
 						while (((size_t)newfreeptr % 4) > 0) newfreeptr++;
-						state->_memory[i]->SetFreePtr(newfreeptr);
+						(*iter)->SetFreePtr(newfreeptr);
 						auto alloc = CreateAllocation();
 						alloc->address = result;
 						alloc->in_use = true;
 						alloc->size = size;
 						alloc->page = i;
 						state->allocations.push_back(*alloc);
+						i++;
+						state->addr_alloc_map[result] = alloc;
 						return result;
 					}
 				}
 			}
 			state->_memory.push_back(new XMemory(_page_size));
+			std::cout << "Allocated new page" << std::endl;
 			return Allocate(size);
+			throw out_of_memory_exception();
 		}
 
 		void XMemoryManager::Deallocate(char* address)
 		{
-			auto alloc = find(address);
+			auto alloc = state->addr_alloc_map[address];
 			if (alloc != nullptr) {
 				alloc->in_use = false;
 			}
