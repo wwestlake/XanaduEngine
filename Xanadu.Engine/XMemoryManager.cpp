@@ -52,6 +52,7 @@ namespace Xanadu {
 	
 		struct alloc_state {
 			avl::avltree<allocation> allocations;
+			XMemory* _internal_memory;
 		};
 
 		struct FindAllocationBySize {
@@ -65,6 +66,20 @@ namespace Xanadu {
 			}
 		};
 
+		
+
+		XMemoryManager::XMemoryManager(size_t page_size, size_t num_pages)
+		{
+			state = new alloc_state();
+			_num_pages = num_pages;
+			_page_size = page_size;
+			_memory = new XMemory*[num_pages];
+			for (int i = 0; i < num_pages; i++)
+			{
+				_memory[i] = new XMemory(page_size);
+			}
+			state->_internal_memory = new XMemory(page_size * 10);
+		}
 
 		allocation* XMemoryManager::find(size_t size)
 		{
@@ -83,14 +98,15 @@ namespace Xanadu {
 			return nullptr;
 		}
 
-		XMemoryManager::XMemoryManager(size_t page_size, size_t num_pages)
+		allocation* XMemoryManager::CreateAllocation() 
 		{
-			state = new alloc_state();
-			_num_pages = num_pages;
-			_page_size = page_size;
-			_memory = new XMemory*[num_pages];
-			for (int i = 0; i < num_pages; i++)
-				_memory[i] = new XMemory(page_size);
+			size_t size = sizeof(allocation) + 4;
+			char* ptr = state->_internal_memory->GetFreePtr();
+			char* newfreeptr = ptr + size;
+			while (((size_t)newfreeptr % 4) > 0) newfreeptr++;
+			state->_internal_memory->SetFreePtr(newfreeptr);
+			auto result = new (ptr) allocation;
+			return result;
 		}
 
 		char* XMemoryManager::Allocate(size_t size)
@@ -109,7 +125,7 @@ namespace Xanadu {
 						char* newfreeptr = result + size;
 						while (((size_t)newfreeptr % 4) > 0) newfreeptr++;
 						_memory[i]->SetFreePtr(newfreeptr);
-						auto alloc = new allocation();
+						auto alloc = CreateAllocation();
 						alloc->address = result;
 						alloc->in_use = true;
 						alloc->size = size;

@@ -46,6 +46,7 @@ namespace Xanadu {
 		class XANADU_API XMemoryManager {
 		public:
 			XMemoryManager(size_t page_size, size_t num_pages);
+			~XMemoryManager();
 
 			char* Allocate(size_t size);
 			void Deallocate(char* address);
@@ -56,6 +57,7 @@ namespace Xanadu {
 
 
 		private:
+			allocation* CreateAllocation();
 			size_t _num_pages;
 			size_t _page_size;
 			XMemory** _memory;
