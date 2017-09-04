@@ -60,7 +60,6 @@ namespace Xanadu {
 			allocation* CreateAllocation();
 			size_t _num_pages;
 			size_t _page_size;
-			XMemory** _memory;
 			alloc_state* state;
 		};
 

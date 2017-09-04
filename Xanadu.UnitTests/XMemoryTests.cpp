@@ -18,7 +18,7 @@ TEST_CASE("XAllocator allocates memory", "[Xanadu::Engine::XXAllocator]") {
 
 	// allocate just enough memory for 10,000 Test objects
 	std::cout << "Test initializing" << std::endl;
-	auto alloc = XAllocator((sizeof(Test) + 8) * 10000, 1);
+	auto alloc = XAllocator(1024 * 1024, 1);
 	std::vector<Test*> tests;
 	// allocate 10,000 test objects
 	std::cout << "Allocate objects" << std::endl;

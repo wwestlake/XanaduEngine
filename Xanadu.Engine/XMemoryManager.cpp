@@ -53,6 +53,7 @@ namespace Xanadu {
 		struct alloc_state {
 			avl::avltree<allocation> allocations;
 			XMemory* _internal_memory;
+			vector<XMemory*> _memory;
 		};
 
 		struct FindAllocationBySize {
@@ -73,10 +74,10 @@ namespace Xanadu {
 			state = new alloc_state();
 			_num_pages = num_pages;
 			_page_size = page_size;
-			_memory = new XMemory*[num_pages];
+			//state->_memory = new XMemory*[num_pages];
 			for (int i = 0; i < num_pages; i++)
 			{
-				_memory[i] = new XMemory(page_size);
+				state->_memory.push_back( new XMemory(page_size) );
 			}
 			state->_internal_memory = new XMemory(page_size * 10);
 		}
@@ -120,11 +121,11 @@ namespace Xanadu {
 			else 
 			{
 				for (int i = 0; i < _num_pages; i++) {
-					if (_memory[i]->IsAvailable(size)) {
-						char* result = _memory[i]->GetFreePtr();
+					if (state->_memory[i]->IsAvailable(size)) {
+						char* result = state->_memory[i]->GetFreePtr();
 						char* newfreeptr = result + size;
 						while (((size_t)newfreeptr % 4) > 0) newfreeptr++;
-						_memory[i]->SetFreePtr(newfreeptr);
+						state->_memory[i]->SetFreePtr(newfreeptr);
 						auto alloc = CreateAllocation();
 						alloc->address = result;
 						alloc->in_use = true;
@@ -135,7 +136,8 @@ namespace Xanadu {
 					}
 				}
 			}
-			throw out_of_memory_exception();
+			state->_memory.push_back(new XMemory(_page_size));
+			return Allocate(size);
 		}
 
 		void XMemoryManager::Deallocate(char* address)
