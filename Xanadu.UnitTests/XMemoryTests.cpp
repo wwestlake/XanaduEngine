@@ -7,17 +7,17 @@ using namespace Xanadu::Engine;
 class Test {
 public:
 
-	int test() {
+	size_t test() {
 		return _i;
 	}
 
-	void set(int i) {
+	void set(size_t i) {
 		_i = i;
 	}
 
 private:
-	int _i;
-
+	size_t _i;
+	size_t block[20];
 };
 
 #define PROGRESS 1000
@@ -27,7 +27,7 @@ TEST_CASE("XAllocator allocates memory", "[Xanadu::Engine::XXAllocator]") {
 
 	// allocate just enough memory for 10,000 Test objects
 	std::cout << "Test initializing" << std::endl;
-	auto alloc = XAllocator(1024 * 1024, 1024);
+	auto alloc = XAllocator(1024 * 1024 * 1024, 2);
 	std::vector<Test*> tests;
 	// allocate 10,000 test objects
 	std::cout << "Allocate objects" << std::endl;
@@ -41,7 +41,7 @@ TEST_CASE("XAllocator allocates memory", "[Xanadu::Engine::XXAllocator]") {
 		}
 	}
 	std::cout << std::endl;
-	SECTION("Allocate and run object") {
+	//SECTION("Run object") {
 		std::cout << "Run objects" << std::endl;
 
 		// call a method on each object
@@ -53,10 +53,10 @@ TEST_CASE("XAllocator allocates memory", "[Xanadu::Engine::XXAllocator]") {
 				std::cout << "."; cout.flush();
 			}
 		}
-	}
+	//}
 	std::cout << std::endl;
 
-	SECTION("Deallocate and reallocate, then run objects") {
+	//SECTION("Deallocate and reallocate, then run objects") {
 		// deallocate 10,000 test objects
 		std::cout << "Deallocate objects" << std::endl;
 		for (int i = 0; i < TEST_QTY; i++) {
@@ -83,7 +83,7 @@ TEST_CASE("XAllocator allocates memory", "[Xanadu::Engine::XXAllocator]") {
 
 		// call a method on each object
 		std::cout << "Run objects" << std::endl;
-		int i = 0;
+		i = 0;
 		for (auto iter = tests.begin(); iter != tests.end(); ++iter) {
 			REQUIRE((*iter)->test() == i);
 			i++;
@@ -93,7 +93,7 @@ TEST_CASE("XAllocator allocates memory", "[Xanadu::Engine::XXAllocator]") {
 		}
 		std::cout << std::endl;
 
-	}
+	//}
 
 }
 
