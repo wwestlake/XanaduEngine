@@ -67,15 +67,15 @@ namespace Xanadu {
 			}
 
 		};
-
+		// && (alloc.size <= (min_size * 1.5))
 		struct FindAllocationBySize {
 			int operator() (const size_t min_size, const allocation& alloc) const {
-				if (!alloc.in_use && alloc.size >= min_size) return 0;
+				if (!alloc.in_use && (alloc.size >= min_size)) return 0;
 				return 1;
 			}
 
 			int operator() (const allocation& alloc, const size_t min_size) const {
-				if (!alloc.in_use && alloc.size >= min_size) return 0;
+				if (!alloc.in_use && (alloc.size >= min_size)) return 0;
 				return 1;
 			}
 		};
@@ -104,7 +104,7 @@ namespace Xanadu {
 		{
 			auto iter = state->allocations.find(size, FindAllocationBySize());
 			if (iter != state->allocations.end()) {
-				//if (! (*iter).in_use) 
+				if (! (*iter).in_use) 
 					return &*iter;
 			}
 			return nullptr;

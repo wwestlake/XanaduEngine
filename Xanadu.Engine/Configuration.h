@@ -1,5 +1,5 @@
-#ifndef __XALLOCATOR_H
-#define __XALLOCATOR_H
+#ifndef XANADU_SINGLE_INCLUDE_CONFIGURATION_H
+#define XANADU_SINGLE_INCLUDE_CONFIGURATION_H
 
 /***************************************************************************************
 Xanadu Open GL Windows Game Engine
@@ -21,51 +21,50 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 
 #include "defines.h"
-#include <iostream>
-#include <assert.h>
-#include <stdlib.h>
-#include <vector>
-#include <boost/thread/mutex.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-#include <boost/static_assert.hpp>
+#include <boost/program_options.hpp>
 #include <boost/shared_ptr.hpp>
-#include "XThing.h"
-#include "XMemoryManager.h"
-#include "AssetHandle.h"
+#include <boost/exception/exception.hpp>
+
+
 
 namespace Xanadu {
 	namespace Engine {
 
-		using namespace boost;
-		class XMemoryManager;
+		namespace po = boost::program_options;
 
 
-		class XANADU_API XAllocator {
+		class XANADU_API configuration_not_initialized_exception : boost::exception {};
+		class XANADU_API configuration_already_initialized_exception : boost::exception {};
+
+		class XANADU_API Configuration {
 		public:
-			XAllocator();
-			XAllocator(size_t page_size, size_t num_pages);
+			~Configuration();
 
-			template <typename T> const AssetHandle<T>& Allocate()
-			{
-				auto ptr = _manager->Allocate(sizeof(T));
-				T* t = new (ptr) T;
-				return *(new AssetHandle<T>(t, this));
-			}
+			static boost::shared_ptr<Configuration> Instance();
 
-			template <typename T> void Dealocate(T* t)
-			{
-				_manager->Deallocate((char*)t);
-				t->T::~T();
-			}
-			
+			static void Init(int argc, char** argv);
+
+			size_t GetMemoryPageSize() { return memory_page_size * megabyte_multiplier; }
+			int GetMemoryMaxPages() { return memory_max_pages; }
+
 		protected:
-			XMemoryManager* _manager;
+			Configuration(int argc, char** argv);
+
+		private:
+			const size_t megabyte_multiplier = 1024 * 1024;
+
+			po::variables_map vm;
+
+			size_t memory_page_size;
+			int memory_max_pages;
 
 		};
+
+
 
 	}
 }
 
 
-
 #endif
+

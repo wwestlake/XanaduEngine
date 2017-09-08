@@ -23,7 +23,7 @@ namespace util = Xanadu::Utilities;
 class TestApp : public xnd::GLApp
 {
 public:
-	TestApp(HINSTANCE hInstance);
+	TestApp(HINSTANCE hInstance, int argc, char** argv);
 	~TestApp();
 	bool Init() override;
 	void Update(float deltaTime) override;
@@ -31,15 +31,15 @@ public:
 	LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) override;
 };
 
-int start()
+int start(int argc, char** argv)
 {
-	auto app = TestApp(0);
+	auto app = TestApp(0, argc, argv);
 	app.Init();
 	return app.Run();
 }
 
 
-int main()
+int main(int argc, char** argv)
 {
 	auto log = util::SystemLogger::Instance();
 
@@ -49,7 +49,7 @@ int main()
 	log->Info( "All Rights Reserved" );
 
 #if 1
-	return start();
+	return start(argc, argv);
 #else
 	std::cout << "Press Any Key" << std::endl;
 	char in[255];
@@ -59,7 +59,7 @@ int main()
 }
 
 
-TestApp::TestApp(HINSTANCE hInstance) : GLApp(hInstance)
+TestApp::TestApp(HINSTANCE hInstance, int argc, char** argv) : GLApp(hInstance, argc, argv)
 {
 }
 

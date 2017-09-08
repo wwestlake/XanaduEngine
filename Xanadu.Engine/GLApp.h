@@ -32,7 +32,7 @@ namespace Xanadu {
 		{
 		public:
 			GLApp();
-			GLApp(HINSTANCE hInstance);
+			GLApp(HINSTANCE hInstance, int argc, char** argv);
 			virtual ~GLApp();
 
 

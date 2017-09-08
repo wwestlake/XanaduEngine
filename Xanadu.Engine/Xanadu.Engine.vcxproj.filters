@@ -67,6 +67,12 @@
     <ClInclude Include="MessageDispatcher.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="AssetHandle.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Configuration.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -106,6 +112,12 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="XMemoryManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetHandle.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Configuration.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>

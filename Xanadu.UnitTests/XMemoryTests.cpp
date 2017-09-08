@@ -1,6 +1,7 @@
 #include "catch.hpp"
 #include "Xanadu.Engine/XAllocator.h"
 #include <vector>
+#include "Xanadu.Engine/AssetHandle.h"
 
 using namespace Xanadu::Engine;
 
@@ -28,7 +29,7 @@ TEST_CASE("XAllocator allocates memory", "[Xanadu::Engine::XXAllocator]") {
 	// allocate just enough memory for 10,000 Test objects
 	std::cout << "Test initializing" << std::endl;
 	auto alloc = XAllocator(1024 * 1024 * 1024, 2);
-	std::vector<Test*> tests;
+	std::vector<AssetHandle<Test>> tests;
 	// allocate 10,000 test objects
 	std::cout << "Allocate objects" << std::endl;
 
@@ -59,12 +60,7 @@ TEST_CASE("XAllocator allocates memory", "[Xanadu::Engine::XXAllocator]") {
 	//SECTION("Deallocate and reallocate, then run objects") {
 		// deallocate 10,000 test objects
 		std::cout << "Deallocate objects" << std::endl;
-		for (int i = 0; i < TEST_QTY; i++) {
-			alloc.Dealocate(tests[i]);
-			if ((i % PROGRESS) == 0) {
-				std::cout << "."; cout.flush();
-			}
-		}
+		tests.clear();
 		std::cout << std::endl;
 
 		tests.clear();
@@ -82,7 +78,7 @@ TEST_CASE("XAllocator allocates memory", "[Xanadu::Engine::XXAllocator]") {
 		std::cout << std::endl;
 
 		// call a method on each object
-		std::cout << "Run objects" << std::endl;
+		std::cout << "Run objects again" << std::endl;
 		i = 0;
 		for (auto iter = tests.begin(); iter != tests.end(); ++iter) {
 			REQUIRE((*iter)->test() == i);

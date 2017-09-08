@@ -1,6 +1,3 @@
-#ifndef __XALLOCATOR_H
-#define __XALLOCATOR_H
-
 /***************************************************************************************
 Xanadu Open GL Windows Game Engine
 Copyright (C) 2017  William W. Westlake Jr.
@@ -20,52 +17,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 
-#include "defines.h"
-#include <iostream>
-#include <assert.h>
-#include <stdlib.h>
-#include <vector>
-#include <boost/thread/mutex.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/shared_ptr.hpp>
-#include "XThing.h"
-#include "XMemoryManager.h"
 #include "AssetHandle.h"
+#include "XAllocator.h"
 
 namespace Xanadu {
 	namespace Engine {
 
-		using namespace boost;
-		class XMemoryManager;
 
-
-		class XANADU_API XAllocator {
-		public:
-			XAllocator();
-			XAllocator(size_t page_size, size_t num_pages);
-
-			template <typename T> const AssetHandle<T>& Allocate()
-			{
-				auto ptr = _manager->Allocate(sizeof(T));
-				T* t = new (ptr) T;
-				return *(new AssetHandle<T>(t, this));
-			}
-
-			template <typename T> void Dealocate(T* t)
-			{
-				_manager->Deallocate((char*)t);
-				t->T::~T();
-			}
-			
-		protected:
-			XMemoryManager* _manager;
-
-		};
 
 	}
 }
 
 
-
-#endif

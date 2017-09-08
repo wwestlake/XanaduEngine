@@ -97,14 +97,12 @@ namespace Xanadu {
 
 
 
-
-
 		boost::shared_ptr<SystemLogger> SystemLogger::Instance()
 		{
 			if (nullptr == instance) {
 				instance = boost::shared_ptr<SystemLogger>(new SystemLogger());
 			}
-			return boost::shared_ptr<SystemLogger>(instance);
+			return instance = boost::shared_ptr<SystemLogger>(instance);
 		}
 
 		void SystemLogger::Log(severity_level severity, string message)
@@ -177,6 +175,14 @@ namespace Xanadu {
 		SystemLogger::~SystemLogger()
 		{
 		}
+
+		SystemLoggerAdapter & SystemLogger::Send(severity_level level)
+		{
+			return SystemLoggerAdapter(level);
+		}
+
+
+
 	}
 }
 

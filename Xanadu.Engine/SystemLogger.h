@@ -22,6 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <list>
 #include <boost/shared_ptr.hpp>
 #include <boost/log/sources/severity_logger.hpp>
+#include <boost/format.hpp>
+#include <sstream>
 
 using namespace std;
 namespace src = boost::log::sources;
@@ -40,10 +42,13 @@ namespace Xanadu {
 			critical
 		};
 
+		struct SystemLoggerAdapter;
 
 		class XANADU_API SystemLogger
 		{
 		public:
+
+
 
 			// static singleton factory produces a share_ptr of this class
 			static boost::shared_ptr<SystemLogger> Instance();
@@ -58,6 +63,7 @@ namespace Xanadu {
 
 			~SystemLogger();
 
+			SystemLoggerAdapter& Send(severity_level level);
 
 		private:
 			SystemLogger();
@@ -66,6 +72,19 @@ namespace Xanadu {
 
 		};
 
+		struct XANADU_API SystemLoggerAdapter {
+
+			SystemLoggerAdapter(severity_level level) : _level(level) {}
+
+			friend const SystemLoggerAdapter& operator<<(const SystemLoggerAdapter& adapter, boost::basic_format<char> message) {
+				std::stringstream ss;
+				ss << message;
+				SystemLogger::Instance()->Log(adapter._level, ss.str());
+				return adapter;
+			}
+		private:
+			severity_level _level;
+		};
 
 	}
 }

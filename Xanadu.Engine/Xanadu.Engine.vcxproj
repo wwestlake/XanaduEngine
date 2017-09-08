@@ -143,7 +143,9 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AssetHandle.h" />
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="Configuration.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GLApp.h" />
@@ -162,6 +164,8 @@
     <ClInclude Include="XThing.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssetHandle.cpp" />
+    <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
