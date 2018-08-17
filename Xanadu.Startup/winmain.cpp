@@ -61,6 +61,8 @@ void repl() {
 	std::cout << std::endl;
 	std::cout << "Xanadu Game Engine, Command Interpreter" << std::endl;
 	std::cout << "Copyright (C) 2013, William Westlake" << std::endl;
+	std::cout << "-------------------------------" << std::endl;
+	std::cout << "Enter 'quit' to stop the engine." << std::endl;
 
 	while (running)
 	{
