@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Xanadu.UnitTests", "Xanadu.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Xanadu.Utilities", "Xanadu.Utilities\Xanadu.Utilities.vcxproj", "{742EC41D-F340-4802-9430-7FE70E10C44F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Xanadu.VirtualMachine", "Xanadu.VirtualMachine\Xanadu.VirtualMachine.vcxproj", "{AADB6719-7C92-405D-BDF1-F36E99A368BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{742EC41D-F340-4802-9430-7FE70E10C44F}.Release|x64.Build.0 = Release|x64
 		{742EC41D-F340-4802-9430-7FE70E10C44F}.Release|x86.ActiveCfg = Release|Win32
 		{742EC41D-F340-4802-9430-7FE70E10C44F}.Release|x86.Build.0 = Release|Win32
+		{AADB6719-7C92-405D-BDF1-F36E99A368BE}.Debug|x64.ActiveCfg = Debug|x64
+		{AADB6719-7C92-405D-BDF1-F36E99A368BE}.Debug|x64.Build.0 = Debug|x64
+		{AADB6719-7C92-405D-BDF1-F36E99A368BE}.Debug|x86.ActiveCfg = Debug|Win32
+		{AADB6719-7C92-405D-BDF1-F36E99A368BE}.Debug|x86.Build.0 = Debug|Win32
+		{AADB6719-7C92-405D-BDF1-F36E99A368BE}.Release|x64.ActiveCfg = Release|x64
+		{AADB6719-7C92-405D-BDF1-F36E99A368BE}.Release|x64.Build.0 = Release|x64
+		{AADB6719-7C92-405D-BDF1-F36E99A368BE}.Release|x86.ActiveCfg = Release|Win32
+		{AADB6719-7C92-405D-BDF1-F36E99A368BE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,14 +20,23 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 
-
-#ifdef XANADUENGINE_EXPORTS
-#define XANADU_API __declspec(dllexport)   
-#define XANADU_API_HEADER_ONLY
-#else  
-#define XANADU_API __declspec(dllimport)   
-#define XANADU_API_HEADER_ONLY
-#endif  
+#if defined _WIN32
+	#ifdef XANADUENGINE_EXPORTS
+		#define XANADU_API __declspec(dllexport)   
+		#define XANADU_API_HEADER_ONLY
+	#else  
+		#define XANADU_API __declspec(dllimport)   
+		#define XANADU_API_HEADER_ONLY
+	#endif  
+#elif defined __GNUC__
+		#ifdef XANADUENGINE_EXPORTS
+			#define XANADU_API __attribute__ ((__visibility__("default")))   
+			#define XANADU_API_HEADER_ONLY
+		#else  
+			#define XANADU_API   
+			#define XANADU_API_HEADER_ONLY
+		#endif  
+#endif
 
 #include <string>
 

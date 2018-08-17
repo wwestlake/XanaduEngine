@@ -19,10 +19,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************************/
 
-#ifdef XANADUUTILITIES_EXPORTS
-#define XANADUUTILITIES_API __declspec(dllexport)
-#else
-#define XANADUUTILITIES_API __declspec(dllimport)
+#if defined _WIN32
+	#ifdef XANADUUTILITIES_EXPORTS
+		#define XANADUUTILITIES_API __declspec(dllexport)
+	#else
+		#define XANADUUTILITIES_API __declspec(dllimport)
+	#endif
+#elif defined __GNUC__
+	#ifdef XANADUUTILITIES_EXPORTS
+		#define XANADUUTILITIES_API __attribute__ ((__visibility__("default")))
+	#else
+		#define XANADUUTILITIES_API
+	#endif
 #endif
 
 #include <string>
